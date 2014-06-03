@@ -1,0 +1,119 @@
+###############################
+
+Michael Walton -- mwwalton@ucsc.edu
+
+Lab section: 1 MW TA: Chelwhon
+
+Due: 5/4/14
+
+###############################
+
+Title: Lab 3: Not My Number
+
+Purpose:
+To begine working with LC3 assembly and make a simple program involving
+loading, storing, basic arithmatic looping and conditionals.
+
+Procedure:
+The revised echo program was used as a model for handing user input and 
+output.  An algortihm detailing the specifications of the program was
+designed to validate user input and provide appropriate error prompts
+where necissary.  The program then enters a for loop structure from one
+to nine.  On each iteration, the program checks if the current index is
+equal to the users number.  If it is not, it prints the current index.
+
+I developed the loop first, because it seemed the most difficult.  The
+loop is composed of an index initializaiton block, an incrementing command
+and a check to see of the index has reached the end of the for loop.  Inside
+the loop block, I wrote a comparison operation to check if the current index
+was equal to the numeric value of the user's input.  This required converting
+the ascii code to numeric value by subtracting 48.
+
+After I had the loop working I wrote the logic for validating the input as 
+a series of branching statements that implemented an 'if, else, finally' type
+procedure.  First 48 is subtracted from the number, if BRz it true then the user
+entered zero an an error message is displayed before restarting.  If the value is
+negative, the user entered a character that is less than 0 (ASCII 48) a NAN
+error is displayed and the program restarts.  If the number is positive,
+57 is subtracted from it and BRnz is checked.  This is to ensure that the number
+entered does not have an ascii value greater than 57 (char 9).
+
+
+Algorithms and other data:
+Pseudo-code algorithm:
+    
+    //GET USER INPUT
+    Print (welcome_message)
+    Prompt user_input
+    ASCII_in = user_input
+    NUM_in = user_input - 48
+
+    //INPUT VALIDATION
+    if ( NUM_in >= 0 )
+        if ( NUM_in == 0)
+            print ("No zeros allowed!")
+            goto 1
+        else if ( NUM_in > 0 )
+            if ( NUM_in - 57 > 0)
+                print ("Thats not a number!")
+                goto 1
+    else if ( NUM_in < 0 )
+        print ("thats not a number!")
+        goto 1
+
+    print ( ASCII_IN )
+    
+    //PRINT NUMBERS LOOP
+    for (int i = 1; i < 10; ++i)
+        if ( NUM_in != i )
+            print (i + 48)
+
+EXAMPLE OUTPUT:
+Welcome to my first LC3 Program!.
+Please enter your favorite number:
+d
+Thats not even a number!
+
+Welcome to my first LC3 Program!.
+Please enter your favorite number:
+f
+Thats not even a number!
+
+Welcome to my first LC3 Program!.
+Please enter your favorite number:
+7
+REALLY?!? I hate 7!!!
+12345689
+
+--- halting the LC-3 ---
+
+
+Questions:
+An addressing mode describes how the operands of an LC3 instruction should
+be decoded
+
+PC-Relative : LD, ST
+Base + Offset : LDR, STR
+Indirect : LDI, STI
+Load Effective Address : LEA
+Immediate : ADD
+
+A trap is a type of instruction that halts the current execution and
+performs some time-sensative procedure such as getting input or
+halting the current program.  Examples include HALT, PUTS and GETC
+
+TRAP instructions always use R0 (0x0000).
+
+What went wrong or what were the challenges?
+Remembering to subtract and add values to do the ASCII < - > numeric
+conversions was confusing at times
+
+
+Conclusion:
+This lab gave me a strong understanding of assembly and begain to give
+me some better intuition for programming at this level.  I already
+have substantial programming experience in high-level languages so
+thinking in terms of assembly has taken some getting used to.  The provided
+C to assembly tutorial proved very helpful as I found it easier to write the
+program in C and then figure out ways to translate it into assembly.
+

@@ -1,0 +1,19 @@
+Directions:
+
+Windows:
+   -Install MPIDE for arduino from http://chipkit.s3.amazonaws.com/builds/mpide-0023-windows-20120903.zip.
+   -Adjust the environment variable 'MPIDE_PATH' in arduino_compile.bat and arduino_program.bat to point at the root folder of your MPIDE installation.
+   -Check the serial port number in arduino_program.bat is correct. This is likely to be COM3 or higher. To find out your serial port number, disconnect your kit board and the entry in Device Manager that disappears should be the one. Reconnect your board and use your serial port number in arduino_program.bat. 
+   -If Windows does not automatically install them, download and install the FTDI drivers from http://www.ftdichip.com/Drivers/VCP.htm
+   -Drag and drop .s file onto arduino_compile.bat.
+   -Drag and drop .hex file produced during compilation onto arduino_program.bat
+
+Mac:
+   -Install MPIDE for arduino from http://chipkit.s3.amazonaws.com/builds/mpide-0023-macosx-20120903.dmg.
+   -Adjust the environment variable 'MPIDE_PATH' to point at mpide.app correctly..
+   -Download and install the FTDI drivers from http://www.ftdichip.com/Drivers/VCP.htm
+   -Open terminal.app in /Applications/Utilities
+   -Run compile script using /path/to/script/arduino_compile.sh /path/to/lab/lab.s
+   -Run program script using /path/to/script/arduino_program.sh /path/to/lab/lab.hex
+
+Both scripts can be used from the command line as expected.  Main should be located in main.cpp. Do not remove this file or core.a.  Keep these files in the same directory as your lab.s file.

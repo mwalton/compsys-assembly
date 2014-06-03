@@ -1,0 +1,97 @@
+###############################
+
+Michael Walton -- mwwalton
+
+Lab section: 1 MW TA: Chelwhon
+
+Due: 4/13/14
+
+Lab Partner: None
+
+###############################
+
+Title:
+Lab 1: Intro to Logic with Multimedia Logic
+
+Purpose:
+To get a basic understanding of MML and its functions
+as well as a working knoledge of logic gates,
+demorgans laws and logic minimization
+
+Procedure:
+The first circuit was constructed following the provided youtube
+tutorial.  This consisted of a single logic 'switch' for input
+an inverter and a lamp for output.  The second circuit was a
+demonstration of demorgans laws.  (In this case A'B' = (A + B)')
+The circuit showed that two inverted inputs to an AND gate is
+logically equivalent to a NOR gate.  The next circuit followed the
+provided truth table and was first implemented using only OR and AND
+gates.  The other implementation used only NAND gates, demonstrating
+the logical completeness of NAND.  This circuit was then minimized
+using boolean algebra and a circuit was built that followed the
+new sum of products expression.
+
+Algorithms and other data:
+The truth table provided in part B was first converted to a
+sum of products expression by boolean algebra (for simplicity,
+OUT denotes output and A, B and C indicate In[2] In[1] and
+In[0] respectively.
+
+OUT = A'B'C' + A'B'C + A'BC
+
+This was then implimented as a circiut using three input OR and
+AND gates.
+
+Next the circuit was converted to a NAND implementation by replacing
+each logic gate with a corresponding NAND circuit.  Transistor counts
+for each implementation were computed by the following equations:
+
+NAND, NOR, NOT : t(i) = 2i
+AND, OR : t(i) = 2i + 2
+
+Where t(i) is the number of transistors and i is the number of inputs to
+a given gate.
+
+The first version had 38 transistors and the NAND version required 36.
+AND and OR gates have exactly two more transistors than their respective
+NAND and NOR gates because AND and OR are basically just NAND and NOR with
+an integrated inverter on the output.
+
+The SOP expression was then minimized using boolean algebra:
+OUT 	= A'B'C' + A'B'C + A'BC
+	= A'(B'C' + B'C + BC)
+	= A'(B'C' + C(B'+ B))
+	= A'(B'C' + C)
+	= A'(B' + C)
+
+This minimized implementation required only 12 transistors.
+
+DeMorgans: (AB)' = A' + B'           (A+B)' = A'B'
+AB means A AND B
+A+B means A OR B
+A' means NOT A
+A'B' means NOT A AND NOT B
+A'+ B' means NOT A OR NOT B
+(AB)' means NOT (A AND B)
+(A+B)' means NOT (A OR B)
+A@B means A XOR B
+
+What went wrong or what were the challenges?
+In my origonal implementation of the NAND gate circuit
+I ended up with more transistors than my first version because
+I replaced each gate with its 'full' NAND equivalent.  I then
+realized that for my AND gates I was effectively inverting the
+output twice (eg: 1 >> 0 >> 1) where >> signifies inversion.
+It took me a moment to realize these inverters where effectively
+doing nothing and could be removed entirely.
+
+Conclusion:
+This lab gave me a strong understanding of the connection between logic tables,
+boolean algebra expressions and real working circuits.  The translation between
+these three representations greatly imploved my understanding of all of them.
+I also learned how to perform logic minimization by boolean algebra as well as
+Karnaugh maps and now have a good understanding of both.  I also have come
+to appreciate how valuable these tools are in circuit optomization for the
+purpose of minimizing the number of transistors required to implement a
+particular circuit.
+

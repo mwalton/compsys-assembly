@@ -1,0 +1,22 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	START             3000
+//	ITSPOSORZERO      3011
+//	ITSPOSITIVE       3015
+//	ITSVALID          301B
+//	LOOP              3028
+//	SKIP              3038
+//	LOOPEND           303C
+//	GREETING          303D
+//	NAN               3084
+//	INZERO            309F
+//	HATENUM           30CA
+//	EXCLPT            30DD
+//	INCHAR            30E2
+//	INNUM             30E3
+//	INDEX             30E4
+//	LIMIT             30E5
+//	N57               30E6
+

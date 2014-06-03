@@ -1,0 +1,77 @@
+###############################
+
+Michael Walton -- mwwalton@ucsc.edu
+
+Lab section: 1 MW TA: Chelwhon
+
+Due: 4/27/14
+
+Lab Partner: Kevin Stewart (krstewar@ucsc.edu)
+
+###############################
+
+Title: Lab 2: Arithmatic Logic Unit and Memory
+
+Purpose:
+To construct a 4bit arithmatic logic unit (ALU) composed of 4 ripple carry full
+adders and basic addressable memory system.
+Then to combine these systems to implement a processor for performing
+addition, subtraction, bitwise negation and bitwise AND functions.
+
+Procedure:
+The memory system required the address decoder logic so that memory addresses
+could be selected using AS1 and AS0.  The circuit was built based on the decoder
+provided in the textbook using four and gates and two inverters.  The provided
+truth table was used to test and confirm the circuit.  Next the multiplexer system
+was constructed out of 4 four-to-one MUXs outputs from the memory array are selected
+using AS1 and AS0 and output was connected to the output display.
+
+For the ALU circuit, I implemented the adder first.  Each single bit full adder
+is composed of 8 three input AND gates with inverter permutations on the input
+the array output was connected to two four input OR gates (one for carry and the
+other for the sum) according to the textbook specification.  I then made four
+copies of the adder and connected the respective carry lines.  The bitwise AND
+and NOT functions were created by simply connecting four inverters and four AND
+gates to the corresponding bits for each output line.  Output was multiplexed 
+using 4 four-to-one MUXs (similarly to the memory MUXs).  Finally OPcode decoding
+was implemented as a two-to-four DEMUX with inverted output.  System status logic
+was built using an OR gate connected to each bit (to check if the value was > 0).
+This output would turn on the LED for positive and its negation would turn on the
+LED for zero.  Negative was temporarily connected to GND (since I did not implement
+two's compliment and subtraction until after combining the ALU and memory).  The last
+carry out bit of the adder was connected to the LED indicating overflow.
+
+To combine the two systems, I copied all the circuit diagrams into a single project
+and connected them following the provided diagram.  Keyboard / ALU switching was
+achieved using 4 two-to-one MUXs that selected between the current ALU output and
+the keypad input using a switch on the select line.  The adder was modified to
+use two's compliment representation by negating all the bits and taking the carry in
+bit to the first adder high when the input value was negative.  Overflow detection
+required checking the cases where the sign of the input values was both positive
+or both negative and the output had the opposite sign.
+
+Algorithms and other data:
+The construction of these circuits drew from several sources including
+the provided diagrams and specifications as well as the textbook.
+I did not use any other calculations or sources during the implementation.
+The clock signal is used to put the memory system in a write-enable state,
+that is a mode in which the memory can make a state change.  My ALU can
+accept a max value of 7 and a min value of -8 without overflow.  To make
+the ALU accept 8 bits I could simply double the size of the adder array, 
+that is, copy the entire circuit and connect the carry of the last bit to
+the newly added four.
+
+What went wrong or what were the challenges?
+Keeping track of two's compliment values and debugging proved challenging
+during this lab.  I often found myself lost by some of the complexity I
+had created.  However it has taught me how to efficiently debug more complex
+circiuts.
+
+Conclusion:
+This lab gave me a strong understanding of what goes on 'under the hood'
+of an ALU.  I gained a more intuitive ability to do binary addition
+and conversions / overflow tests using two's compliment (which I
+frequently had to do by hand to debug my circuits).  I also gained a good
+understanding of how multiplexing and decoding can be used to control
+data processing in ALU and memory circuits.
+

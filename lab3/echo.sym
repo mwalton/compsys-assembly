@@ -1,0 +1,11 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	START             3000
+//	PUTC              3008
+//	GREETING          3010
+//	USERSTRING        3047
+//	NEWLINE           306B
+//	USERINPUT         3071
+

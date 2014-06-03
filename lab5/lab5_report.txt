@@ -1,0 +1,76 @@
+###############################
+
+Michael Walton -- mwwalton@ucsc.edu
+
+Lab section: 1 MW TA: Chelwhon
+
+Due: 5/20/14
+
+###############################
+
+Title: Lab 5: Arduino/PIC32 light patterns
+
+Purpose:
+To begin learning MIPS & start playing with peripheral hardware!
+
+Procedure:
+First I implemented the delay subroutine to make all the time delay
+handling more convineant.  I made a nested loop structure and then
+plugged in my number of instructions per iteration into the provided
+formula to get the necissary time constant.  The delay function works
+by looping over two counters, one over the time constant and one over
+the time in milliseconds given by arg0.
+
+Next I designed subroutines that looped over and enabled all the switches
+and LEDs to initialize and enable them.  This was achieved using bitshifts
+from the base for each I/O TRISx
+
+I also designed subroutines that turn on and off individual leds, turn on/off
+all leds at once and a switch polling routine called readSwitch which accepts
+the switch number in arg0 and returns its state in v0.
+
+I then used all of these subroutines along with some logic, loops and
+bitshifting to implement four light patterns.
+
+Algorithms and other data:
+
+Delay algorithm:
+from 0 to n-milliseconds
+    from 0 to time-constant
+        waste time
+
+Read switches algorithm:
+int readSwitch(int switchNum)
+    mask = 0x100
+    for 1 to switchNum
+        bitshift mask left
+    return mask AND PORTD
+
+Questions:
+1.  If the serial output is put into the delay loop, the loop is slowed down
+    this occurs because the loop must complete those extra instructions (writing
+    to the serial port) on each iteration
+2.  If a nop is excluded from after a branch, the next instruction is partially
+    fetched due to the pipeline architechre of MIPS.  I have observed that this
+    can cause some unexpected behavior such as 'hanging'
+3.  I read inputs 1 and 2 by left shifting a mask and applying to PORTD.  This means
+    for switch one, the mask is shifted once, for 2 twice etc.  Because I implemented
+    this subroutine in a generic way, it works for all the other switches as well! ^_^
+4.  My program does not change patterns immediatly when the switches are toggled.  This
+    is because the 'animation' loop (that is the patterns) is nested inside the whole
+    program (which does the switch polling and pattern selection logic).  This means
+    that if the switch state changes, it must finish the current pattern cycle before the
+    switched can be polled.  This could be improved by using inturrupts instead of polling
+
+What went wrong or what were the challenges?
+This one actually went pretty smooth for me once I recognized the
+MIPS equivalents of LC3 opcodes.  The I/O was definitly the most
+challenging aspect.
+
+Conclusion:
+This lab was awesome!  I had fun working with the new hardware and MIPS felt much more
+'real' than LC3 in that I could see it being actually used in a real application.
+Although the loss of the single-step debugging technique proved challenging at times
+I figured out new methods (such as inserting print statements to check variables etc)
+I also was surprised at how many skills we have learned where intergrated into this project:
+masking, bit manipulation, I/O looping/branching etc.
