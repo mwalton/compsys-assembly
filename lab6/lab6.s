@@ -117,8 +117,6 @@ ProgramNote:
     li      $a0, 0
     jal     analogRead
     nop
-
-# convert analog freq to period
     move    $a0, $v0
 # print freq to serial
     la      $a0, Serial
@@ -145,22 +143,134 @@ ProgramNote:
 
 
 # if a button is pressed, play the current tone
-    
-    li      $a0, 3
+ 
+# if button 0
+    li      $a0, 0
     jal     readButton
     nop
     beqz    $v0, notB0
     nop
     jal     EnableTimer
     nop
+# if switch 1
+    li      $a0, 1
+    jal     readSwitch
+    nop
+    beqz    $v0, notS1
+    nop
+
+# read freq, conv to period & store
+    li      $a0, 0
+    jal     analogRead
+    nop
+    move    $a0, $v0
+    jal     Freq2Period
+    nop
+    sw      $v0, b0note
+    
     j       testSound
     nop
 notB0:
+# if button 1
+    li      $a0, 1
+    jal     readButton
+    nop
+    beqz    $v0, notB1
+    nop
+    jal     EnableTimer
+    nop
+# if switch 1
+    li      $a0, 1
+    jal     readSwitch
+    nop
+    beqz    $v0, notS1
+    nop
+
+# read freq, conv to period & store
+    li      $a0, 0
+    jal     analogRead
+    nop
+    move    $a0, $v0
+    jal     Freq2Period
+    nop
+    sw      $v0, b1note
+    j       testSound
+    nop
+notB1:
+# if button 2
+    li      $a0, 2
+    jal     readButton
+    nop
+    beqz    $v0, notB2
+    nop
+    jal     EnableTimer
+    nop
+# if switch 1
+    li      $a0, 1
+    jal     readSwitch
+    nop
+    beqz    $v0, notS1
+    nop
+
+# read freq, conv to period & store
+    li      $a0, 0
+    jal     analogRead
+    nop
+    move    $a0, $v0
+    jal     Freq2Period
+    nop
+    sw      $v0, b2note
+    j       testSound
+    nop
+notB2:
+# if button 3
+    li      $a0, 3
+    jal     readButton
+    nop
+    beqz    $v0, notB3
+    nop
+    jal     EnableTimer
+    nop
+# if switch 1
+    li      $a0, 1
+    jal     readSwitch
+    nop
+    beqz    $v0, notS1
+    nop
+
+# read freq, conv to period & store
+    li      $a0, 0
+    jal     analogRead
+    nop
+    move    $a0, $v0
+    jal     Freq2Period
+    nop
+    sw      $v0, b3note
+    j       testSound
+    nop
+notB3:
+# else:
     jal     DisableTimer
     nop
 
-    j       testSound
+notS1:
+# check if all the values have been set
+    lw      $t0, b0note
+    lw      $t1, b1note
+    lw      $t2, b2note
+    lw      $t3, b3note
+
+    beqz    $t0, testSound
     nop
+    beqz    $t1, testSound
+    nop
+    beqz    $t2, testSound
+    nop
+    beqz    $t3, testSound
+    nop
+# done programming, time to play!
+    #jal     DisableTimer
+    #nop
 
 	pop $ra
 	jr	$ra
@@ -170,6 +280,93 @@ notB0:
 # Plays custom tone */	
 PlayNote:
 	push $ra
+
+playMusic:
+# if button 0
+    li      $a0, 0
+    jal     readButton
+    nop
+    beqz    $v0, noPlayB0
+    nop
+    lw      $t1, b0note
+# clear the period of the timer
+    la      $t8, PR1
+    li      $t0, 0b1111111111111111
+    sw      $t0, 4($t8)
+# set the new period
+    sw      $t1, 8($t8)
+
+    jal     EnableTimer
+    nop
+    
+    j       playMusic
+    nop
+noPlayB0:
+# if button 1
+    li      $a0, 1
+    jal     readButton
+    nop
+    beqz    $v0, noPlayB1
+    nop
+    lw      $t1, b1note
+# clear the period of the timer
+    la      $t8, PR1
+    li      $t0, 0b1111111111111111
+    sw      $t0, 4($t8)
+# set the new period
+    sw      $t1, 8($t8)
+
+    jal     EnableTimer
+    nop
+    
+    j       playMusic
+    nop
+noPlayB1:
+# if button 2
+    li      $a0, 2
+    jal     readButton
+    nop
+    beqz    $v0, noPlayB2
+    nop
+    lw      $t1, b2note
+# clear the period of the timer
+    la      $t8, PR1
+    li      $t0, 0b1111111111111111
+    sw      $t0, 4($t8)
+# set the new period
+    sw      $t1, 8($t8)
+
+    jal     EnableTimer
+    nop
+    
+    j       playMusic
+    nop
+noPlayB2:
+# if button 3
+    li      $a0, 3
+    jal     readButton
+    nop
+    beqz    $v0, noPlayB3
+    nop
+    lw      $t1, b3note
+# clear the period of the timer
+    la      $t8, PR1
+    li      $t0, 0b1111111111111111
+    sw      $t0, 4($t8)
+# set the new period
+    sw      $t1, 8($t8)
+
+    jal     EnableTimer
+    nop
+    
+    j       playMusic
+    nop
+noPlayB3:
+    
+    jal     DisableTimer
+    nop
+    j       playMusic
+    nop
 
     pop $ra
 	jr	$ra
@@ -283,8 +480,8 @@ readButton:
 # BTN 0:
     bgtz    $a0, btn123
     nop
-    li      $t1, 0b10000000 # bit 7
-    la      $t0, PORTF
+    li      $t1, 0b10 # bit 1
+    lw      $t0, PORTF
     j       returnButtonState
     nop
 # BTN 1-3 
@@ -318,8 +515,8 @@ enableIO:
     li      $t0, 0b111111100000 #bits 5-11
     la      $t8, TRISD
     sw      $t0, 8($t8)
-# Enable BTN0 (b7)
-    li      $t0, 0b10000000 # bit 7
+# Enable BTN0 (b1)
+    li      $t0, 0b10 # bit 1
     la      $t8, TRISF
     sw      $t0, 8($t8)
 
