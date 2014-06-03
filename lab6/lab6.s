@@ -23,7 +23,7 @@ lw      \reg, ($sp)
 .global SetupTimer 
 .global	ProgramNote
 .global	PlayNote
-
+#
 /* This starts the program code */
 .text
 /* We do not allow instruction reordering in our lab assignments. */
