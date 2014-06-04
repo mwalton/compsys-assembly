@@ -1,0 +1,118 @@
+###############################
+
+Michael Walton -- mwwalton@ucsc.edu
+
+Lab section: 1 MW TA: Chelwhon
+
+Due: 6/4/14
+
+###############################
+
+Title: Lab 6: Timers and Interrupts
+
+Purpose:
+Learn to use interrupts and interrupts and some audio signal theory for producing tones
+in MIPS on the arduino boards.
+
+Procedure:
+I followed the general procedure outlined in the lab instructions and during Jay's presentation.
+First I wired the piezo buzzer and enabled the pin as output.  I wanted to test to make sure I had
+it set up correctly before I started trying to configure the timer & interrupts.
+
+Next I followed the instructions detailed in the manuals for configuring the timer and interrupts.
+To test my configuration I had a loop that would write a message to serial every time that the
+interrupt was triggered.  Next I worked on the enable / disable subroutines by toggling the
+interrupt enable bit.  I then began work on the program note subroutine.
+
+For programNote() I first wrote my frequency2period sub and had it write the converted value
+of the potentiometer to the serial port so I could check if the calculations looked right.
+Next I had it write its output to PR1 to set the period of the interrupt timer.  After I confirmed
+that it was making a variable sound, I started on enabling the buttons and switch.
+
+I re-used a sub from the last assignment to enable the switch and based my button enable and read
+subs on the switch ones.  After I confirmed that all the swithces and buttons were working, 
+I added all the conditional logic to poll for button presses and check if the switch was flipped.
+If a button was pressed, I would do the analog read, set the period and enable the timer.  Then
+I wrote a conditional to check if the switch was flipped and saved the current period if it was,
+if not I just jumped back to the top of the polling loop.
+
+Play note worked similarly, except that if the button press condition was in an on state it would
+load the corresponding frequency from memory, set PR1 to the stored value and enable the timer.
+If no buttons were pressed, the timer is disabled.
+
+
+Algorithms and other data:
+
+Program note pseudo-code (provided by chelhwon):
+ProgramNote()
+
+... subroutine epilogue (push registers)
+
+Read analog signal
+
+Display frequency (carefull here since print overwrite stuff)
+
+Convert freq to period
+
+if SW1-4 == 1, then jump to DONE
+
+    ... more stuff here
+
+    if BTN1 == 1 {
+
+        PR1 = period
+
+        Turn on sound
+
+        ... more stuff here
+
+        if SW1 == 1 {
+
+            store period
+
+            ... more stuff
+
+        }
+
+    }
+
+    else if BTN2 == 1 { ... do btn2 case }
+
+    else if BTN3 == 1 { ... do btn3 case }
+
+    else if BTN4 == 1 { ... do btn4 case }
+
+    else { turn off sound }
+
+    DONE:
+
+    ... more stuff
+
+    ... subroutine prologue (pop registers)
+
+    jr  $ra
+
+    nop
+
+
+Read switches algorithm:
+int readSwitch(int switchNum)
+    mask = 0x100
+    for 1 to switchNum
+        bitshift mask left
+    return mask AND PORTD
+
+Questions:
+
+What went wrong or what were the challenges?
+The contacts between the piezo leads and the board headers were really finicky,
+sometimes they would come un-done and I would think the tone stopped becase of
+my code.  Also the initial interrupt & timer enable/config was very frusturating
+and difficult to debug.
+
+Conclusion:
+Over all, this lab was awesome!  It was fun to solve this problem in such an open
+ended way.  I have played with arduino before but never messed with timers &
+interrupts because I could not understand how they worked.  Now I get it and
+I don't have to rely on libraries / other peoples' code!!  This lab made me feel
+much more comfortable with the hardware and I enjoy programming in MIPS much more now.
